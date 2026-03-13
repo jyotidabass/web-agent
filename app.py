@@ -223,7 +223,7 @@ st.markdown(
     </style>
     <div class="footer">
         Built with ❤️ using Streamlit | 
-        <a href="https://www.linkedin.com/in/bhavishya-pandit/" target="_blank" style="color: #f1f1f1; text-decoration: none;">Bhavishya Pandit</a>
+        <a href="https://www.linkedin.com/in/jyoti dabass/" target="_blank" style="color: #f1f1f1; text-decoration: none;">jyoti dabass</a>
     </div>
     """,
     unsafe_allow_html=True,
