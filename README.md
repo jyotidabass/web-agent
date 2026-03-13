@@ -18,6 +18,7 @@ Built with Streamlit, LangChain, Google Gemini, and the `browser-use` library. U
 - [Environment Variables](#environment-variables)
 - [Running the App](#running-the-app)
 - [Code Walkthrough](#code-walkthrough)
+- [Blog Post](#blog-post)
 - [Repo Naming](#repo-naming)
 - [Known Issues & Notes](#known-issues--notes)
 
@@ -283,6 +284,57 @@ def upload_to_bq(df, table_name):
 ```
 
 Simple `WRITE_APPEND` — no upserts or deduplication. The table is created automatically on first write.
+
+---
+
+## Blog Post
+
+### 📖 Build Your Own AI Web Agent in Python: A Step-by-Step Guide
+
+> **Read it on Medium (8 min read):**
+> 🔗 https://medium.com/@jyotidabass/build-your-own-ai-web-agent-in-python-a-step-by-step-guide-74be67c5b45f?sk=128722450176e5215182614db7baa0e4
+
+Written by [Jyoti Dabass, Ph.D.](https://medium.com/@jyotidabass), this companion article is a complete beginner-friendly deep dive into how this project was designed and built from scratch — explaining every function, every design decision, and every concept in plain English so that even readers new to AI or Python can fully understand and replicate it.
+
+---
+
+### What the Blog Covers
+
+**Part 1 — The Big Picture**
+The article opens with the end-to-end user flow: you enter a Gemini API key and a plain-English task, the AI reasons about what steps are needed, a real browser opens invisibly in the background (powered by Playwright), executes the task autonomously, and returns results to your screen. Feedback you submit gets logged permanently to Google BigQuery in the cloud.
+
+**Part 2 — The Libraries (Your Toolbox)**
+Every import in `app.py` is explained in plain language — what `streamlit` does (builds the visual UI without any HTML), why `asyncio` is needed (lets the app wait for a browser without freezing), what `browser_use` actually is (the library that controls a real browser like a human), and the role of each Google Cloud library.
+
+**Part 3 — Connecting to Google BigQuery**
+The blog uses an intuitive analogy: the `service-account-key.json` file is your private password to Google's cloud vault. The `bigquery.Client` is the connection that opens the vault door. It's initialized once at app startup and reused for every database operation.
+
+**Part 4 — Session Management**
+Each user gets a unique session ID generated from the current timestamp (e.g. `id_2025-03-13 10:45:23.123456`), stored in Streamlit's `session_state`. The app checks on every rerun whether the session is older than 10 minutes — if so, it auto-rotates to a fresh one, keeping each period of activity tracked separately.
+
+**Part 5 — The AI Agent (Heart of the App)**
+This is the most detailed section. The blog explains:
+- Why `perform_search` is declared `async` — so it can pause while waiting for slow browser operations without blocking Streamlit
+- Why `temperature=0` is used — for precise, consistent, factual answers with no randomness
+- How the `Agent` from `browser-use` takes a plain-English task + the Gemini LLM and autonomously figures out all required browser steps
+- Why a manually managed `asyncio` event loop (`asyncio.new_event_loop()`) is needed to bridge Streamlit's synchronous execution model with the async agent
+- How `extracted_content()` returns a list where intermediate agent steps are all items except the last, and the final answer is the last item
+
+**Part 6 — Saving Data to BigQuery**
+The `upload_to_bq` helper is walked through line by line — pointing to a specific dataset/table, using `WRITE_APPEND` to add rows without deleting history (like appending to a log file), uploading a pandas DataFrame directly, and using `load_job.result()` to wait for confirmation before proceeding.
+
+**Part 7 — The User Interface**
+The Streamlit layout is explained: a two-column header (3:1 ratio) for the title and API key input, the `type="password"` field that hides the key as you type, the Execute button, and the spinner that displays while the agent is working.
+
+**Part 8 — Collecting User Feedback**
+The `streamlit-feedback` thumbs widget is covered — how clicking a thumb triggers `_submit_feedback`, which converts 👍 to `1` and 👎 to `0`, bundles it with the session ID and optional comment text, and appends the row to BigQuery permanently.
+
+**Part 9 — Docker Packaging**
+The Dockerfile is dissected layer by layer — starting from `python:3.11.8`, installing pip dependencies, pre-installing Playwright browser binaries, copying app code, exposing port 8080, and launching Streamlit. The blog describes it as "packing a suitcase" — each layer adds one thing the app needs to run anywhere.
+
+---
+
+> The blog concludes that in under 200 lines of Python, this project combines five powerful tools — Streamlit, Gemini 1.5 Pro, browser-use + Playwright, BigQuery, and Docker — whose patterns (AI agents, async execution, session tracking, feedback loops) are the building blocks of nearly every modern AI product.
 
 ---
 
