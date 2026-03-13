@@ -77,7 +77,7 @@ The entire app is a single file (`app.py`). There are no submodules or separate 
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/web-agent.git
+git clone https://github.com/jyotidabass/web-agent.git
 cd web-agent
 ```
 
@@ -302,7 +302,7 @@ However, if you want to rename it, here are some options depending on the direct
 To rename on GitHub: **Settings → Repository name → Rename**. Then update your local remote:
 
 ```bash
-git remote set-url origin https://github.com/your-username/NEW-NAME.git
+git remote set-url origin https://github.com/jyotidabass/NEW-NAME.git
 ```
 
 ---
@@ -317,4 +317,6 @@ git remote set-url origin https://github.com/your-username/NEW-NAME.git
 
 ---
 
+## Contributing
 
+PRs and issues welcome! Built by [Jyoti Dabass](https://github.com/jyotidabass).
