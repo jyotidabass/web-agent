@@ -317,6 +317,4 @@ git remote set-url origin https://github.com/your-username/NEW-NAME.git
 
 ---
 
-## Contributing
 
-PRs and issues welcome! Built by [Bhavishya Pandit](https://www.linkedin.com/in/bhavishya-pandit/).
