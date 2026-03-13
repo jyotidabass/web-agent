@@ -59,7 +59,7 @@ def make_new_session(session_data_df):
 def welcome_message():
     st.balloons()
     st.write(f"""
-**Your AI’s Gateway to the Browser in one click!**
+**Your AI's Gateway to the Browser in one click!**
 
 ✨ Features:
 
@@ -72,39 +72,6 @@ def welcome_message():
 ###### Collects feedback to improve — no personal data 🔒
 ###### Powered by Google Cloud 🌥️
 """)
-
-@st.dialog("Share Your Model Matrimony Experience 🕵️‍♂️")
-def share_app():
-    if 'copy_button_clicked' not in st.session_state:
-        st.session_state.copy_button_clicked = False
-        
-    def copy_to_clipboard():
-        st.session_state.copy_button_clicked = True
-        st.write('<script>navigator.clipboard.writeText("google.com");</script>', unsafe_allow_html=True)
-        
-    app_url = 'https://model-matrimony.app'
-    text = f'''Looking for the perfect open source LLM? 🤔
-Check out Model Matrimony - it matches you with the ideal LLM for your needs!
-
-Try this free tool and find your perfect model match now 🚀
-Link to the app: {app_url}
-    '''
-    col1, col2, col3 = st.columns([1, 1, 1])
-    
-    with col1:
-        url = 'https://www.linkedin.com/sharing/share-offsite/?url={app_url}'
-        st.link_button('💼 LinkedIn', url)
-    with col2:
-        url = f'https://x.com/intent/post?original_referer=http%3A%2F%2Flocalhost%3A8502%2F&ref_src=twsrc%5Etfw%7Ctwcamp%5Ebuttonembed%7Ctwterm%5Eshare%7Ctwgr%5E&text={text}+%F0%9F%8E%88&url=%7B{app_url}%7D'
-        st.link_button('𝕏 Twitter', url)
-    with col3:
-        placeholder = st.empty()
-        if st.session_state.copy_button_clicked:
-            placeholder.button("Copied!", disabled=True)
-            st.toast('Link copied to clipboard! 📋')
-        else:
-            placeholder.button('📄 Copy Link', on_click=copy_to_clipboard)
-    st.text_area("Sample Text", text, height=350)
 
 async def perform_search(query, api_key):
     llm = ChatGoogleGenerativeAI(
@@ -144,13 +111,11 @@ def load_lottieurl(url: str):
         return None
     return r.json()
 
-# lottie_hello = load_lottieurl('https://lottie.host/7068ee1c-5f48-429c-aca3-7aa89eb1de98/MpwlwRBTj0.json')
-
 session_data_df = pd.DataFrame(columns=["session_id", "session_creation_time"])
 if 'session_id' not in st.session_state:
     make_new_session(session_data_df)
 else:
-    # Check if session is older than 5 minutes
+    # Check if session is older than 10 minutes
     session_age = datetime.now() - st.session_state.created_at
     if session_age > timedelta(minutes=10):
         make_new_session(session_data_df)
@@ -223,7 +188,9 @@ st.markdown(
     </style>
     <div class="footer">
         Built with ❤️ using Streamlit | 
-        <a href="https://www.linkedin.com/in/jyoti dabass/" target="_blank" style="color: #f1f1f1; text-decoration: none;">jyoti dabass</a>
+        <a href="https://www.linkedin.com/in/jyoti-dabass-ph-d-2b747083/" target="_blank" style="color: #f1f1f1; text-decoration: none;">Jyoti Dabass</a>
+        &nbsp;|&nbsp;
+        <a href="https://github.com/jyotidabass" target="_blank" style="color: #f1f1f1; text-decoration: none;">GitHub</a>
     </div>
     """,
     unsafe_allow_html=True,
